@@ -84,17 +84,6 @@ def inference(img_gray, img):
 
 
 if __name__ == "__main__":
-    img_gray, img = acquire('sticks.jpg')
-    img_preproc = preprocess(img_gray)
-    
-    fig = plt.subplots(figsize=(12,12))
-    plt.subplot(1,2,1)
-    helper.disp_img(img)
-    plt.subplot(1,2,2)
-    helper.disp_img(img_preproc)
-    
-    contours, contour_img = helper.compute_contours(img_preproc)
-    helper.disp_img(contour_img)
     
     feats_0, mu_0, sig_0 = process('sticks.jpg', 0)
     feats_1, mu_1, sig_1 = process('leaves.jpg', 1)
