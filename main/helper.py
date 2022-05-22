@@ -22,7 +22,7 @@ def disp_img(img, title=None, rand_color=False):
 def compute_contours(img):
     contours, cntr_img = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
     res_img = cv2.cvtColor(255*img, cv2.COLOR_GRAY2RGB)
-    res_img = cv2.drawContours(res_img, contours, contourIdx=-1, color=(255, 0, 0), thickness=20)  # colorIdx==-1 : all contours
+    res_img = cv2.drawContours(res_img, contours, contourIdx=-1, color=(255, 0, 0), thickness=10)  # colorIdx==-1 : all contours
     return contours, res_img
 
 def features(contours):
@@ -52,8 +52,8 @@ def plot_feats(feats, mu, sig, class_no):
     plt.grid(True)
 
 def visualize_model(feats_0, mu_0, sig_0, feats_1, mu_1, sig_1):
-    x = np.linspace(0.35, 0.8, 100)
-    y = np.linspace(0.14, 0.25, 100)
+    x = np.linspace(0.1, 1.15, 100)
+    y = np.linspace(0.018, 0.175, 100)
     X, Y = np.meshgrid(x,y)
     XY = np.dstack((X, Y))
     pdf_0 = scipy.stats.multivariate_normal(mean = mu_0, cov = sig_0).pdf
