@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import cv2
 import os
 import scipy.stats
@@ -16,9 +17,9 @@ def preprocess(img):
     #binarize the image and clean up the segments
     se = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7,7))
     img2 = (img < 220).astype(np.uint8)
-    img2 = cv2.erode(img2, se, iterations=1)
+    img2 = cv2.erode(img2, se, iterations=2)
     for _ in range(2):
-        img2 = cv2.dilate(img2, se, iterations=2)
+        img2 = cv2.dilate(img2, se, iterations=3)
         img2 = cv2.erode(img2, se, iterations=2)
     return img2
 
@@ -28,7 +29,7 @@ def get_features(contours):
    # loop through all found segments 
    
    for k, contour_features in enumerate(available_features):
-       feats[k] = available_features[k]["perimeter"], available_features[k]["minor_axis"]*0.001
+       feats[k] = available_features[k]["perimeter"]*0.001, available_features[k]["minor_axis"]*0.001
        
    return feats
 
@@ -60,9 +61,9 @@ def classify_sample(feats, mu_0, sig_0, mu_1, sig_1):
     p_feat_given_1 = pdf_1(feats)
     p_0  = 0.5
     p_1 = 0.5
-    class_gb = p_feat_given_0 * p_0
-    class_lic = p_feat_given_1 * p_1
-    if class_gb < class_lic:
+    class_0 = p_feat_given_0 * p_0
+    class_1 = p_feat_given_1 * p_1
+    if class_0 < class_1:
         class_no = 1
     else:
         class_no = 0
@@ -84,6 +85,7 @@ def inference(img_gray, img):
 
 
 if __name__ == "__main__":
+
     
     feats_0, mu_0, sig_0 = process('sticks.jpg', 0)
     feats_1, mu_1, sig_1 = process('leaves.jpg', 1)
